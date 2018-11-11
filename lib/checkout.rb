@@ -1,7 +1,8 @@
+require 'product'
+
 class Checkout
-  ARTICLES = { GR1: 3.11, SR1: 5, CF1: 11.23 }
   
-  def initialize rules={}
+  def initialize rules=[]
     @rules = rules
     @basket = []
   end
@@ -11,6 +12,14 @@ class Checkout
   end
   
   def total
-    @basket.inject(0) { |sum, item| sum += ARTICLES[item]; sum }
+    total_without_discount - discount
+  end
+  
+  def total_without_discount
+    @basket.inject(0) { |sum, product| sum += Product.price(product) }
+  end
+  
+  def discount
+    @rules.inject(0) { |sum, rule| sum += rule.apply(@basket) }
   end
 end
