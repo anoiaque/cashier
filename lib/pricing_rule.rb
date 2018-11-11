@@ -7,15 +7,15 @@ class PricingRule
     @rule = rule
   end
   
-  def apply items
-    send(@rule, items)
+  def apply basket
+    @items = basket.select { |product| product == @product }
+    return 0 unless apply?
+
+    @rule[:discount][Product.price(@product), @items.count]
   end
   
-  private
-  
-  def buy_one_get_one_free items
-    count = items.count { |item| item == @product }
-    
-    (count / 2) * Product.price(@product)
+  def apply?
+    @items.count >= @rule[:bought]
   end
+  
 end

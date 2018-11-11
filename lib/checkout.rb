@@ -12,7 +12,7 @@ class Checkout
   end
   
   def total
-    total_without_discount - discount
+    (total_without_discount - discount).round(2)
   end
   
   def total_without_discount
